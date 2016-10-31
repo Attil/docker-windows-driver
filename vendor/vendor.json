@@ -1,0 +1,87 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "vzPNBiOJFecKT9FA6aAtmOjRlgs=",
+			"path": "github.com/Microsoft/go-winio",
+			"revision": "ce2922f643c8fd76b46cadc7f404a06282678b34",
+			"revisionTime": "2016-06-21T21:14:38Z"
+		},
+		{
+			"checksumSHA1": "2avCvSn0XonfApKKuTMyiQmk7s0=",
+			"path": "github.com/Sirupsen/logrus",
+			"revision": "3ec0642a7fb6488f65b06f9040adc67e3990296a",
+			"revisionTime": "2016-08-29T20:23:21Z"
+		},
+		{
+			"checksumSHA1": "RBwpnMpfQt7Jo7YWrRph0Vwe+f0=",
+			"path": "github.com/coreos/go-systemd/activation",
+			"revision": "61c7ee68bddeb1e66b491c3e1045c4f72b2cd6e3",
+			"revisionTime": "2016-10-24T11:49:43Z"
+		},
+		{
+			"checksumSHA1": "e8qgBHxXbij3RVspqrkeBzMZ564=",
+			"path": "github.com/coreos/go-systemd/util",
+			"revision": "61c7ee68bddeb1e66b491c3e1045c4f72b2cd6e3",
+			"revisionTime": "2016-10-24T11:49:43Z"
+		},
+		{
+			"checksumSHA1": "O8c/VKtW34XPJNNlyeb/im8vWSI=",
+			"path": "github.com/coreos/pkg/dlopen",
+			"revision": "447b7ec906e523386d9c53be15b55a8ae86ea944",
+			"revisionTime": "2016-10-26T22:29:26Z"
+		},
+		{
+			"checksumSHA1": "AeoH23qpdto4UR0eb04eLUH6JL4=",
+			"path": "github.com/docker/go-connections/sockets",
+			"revision": "1494b6df4050e60923d68cd8cc6a19e7af9f1c01",
+			"revisionTime": "2016-10-28T16:09:38Z"
+		},
+		{
+			"path": "github.com/docker/go-plugins-helper",
+			"revision": ""
+		},
+		{
+			"path": "github.com/docker/go-plugins-helpers",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "O8CWhk39rLpO38BIrEa7TKPSIGE=",
+			"path": "github.com/docker/go-plugins-helpers/network",
+			"revision": "60d242cfd0fb30e5002fbf76bf6872e81e85adba",
+			"revisionTime": "2016-10-31T11:46:40Z"
+		},
+		{
+			"checksumSHA1": "SK1epV582t6zeBtowO7cidLFgRE=",
+			"path": "github.com/docker/go-plugins-helpers/sdk",
+			"revision": "60d242cfd0fb30e5002fbf76bf6872e81e85adba",
+			"revisionTime": "2016-10-31T11:46:40Z"
+		},
+		{
+			"checksumSHA1": "3AoPMXlmVq2+iWMpsdJZkcUKHB8=",
+			"path": "github.com/opencontainers/runc/libcontainer/user",
+			"revision": "4c8007f34a0077a1040923ee4c7cec64b6e070d4",
+			"revisionTime": "2016-10-28T23:00:52Z"
+		},
+		{
+			"checksumSHA1": "LvdVRE0FqdR68SvVpRkHs1rxhcA=",
+			"path": "golang.org/x/net/proxy",
+			"revision": "4cfeeeb61ae8daa2a4b06572024786e56f23504c",
+			"revisionTime": "2016-10-30T07:22:20Z"
+		},
+		{
+			"checksumSHA1": "aVgPDgwY3/t4J/JOw9H3FVMHqh0=",
+			"path": "golang.org/x/sys/unix",
+			"revision": "c200b10b5d5e122be351b67af224adc6128af5bf",
+			"revisionTime": "2016-10-22T18:22:21Z"
+		},
+		{
+			"checksumSHA1": "fpW2dhGFC6SrVzipJx7fjg2DIH8=",
+			"path": "golang.org/x/sys/windows",
+			"revision": "c200b10b5d5e122be351b67af224adc6128af5bf",
+			"revisionTime": "2016-10-22T18:22:21Z"
+		}
+	],
+	"rootPath": "github.com/m-kostrzewa/docker-windows-driver"
+}
