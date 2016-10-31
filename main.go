@@ -3,78 +3,70 @@
 
 package main
 
-import "net/http"
+import "github.com/docker/go-plugins-helpers/network"
 
-type HandlerType func(http.ResponseWriter, *http.Request)
+type dummyNetworkDriver struct{}
 
 func main() {
-
-	routeHandlers := map[string]HandlerType{
-		"/Plugin.Activate":                activateHandler,
-		"/NetworkDriver.GetCapabilities":  getCapabilitiesHandler,
-		"/NetworkDriver.CreateNetwork":    nullResponseHandler,
-		"/NetworkDriver.DeleteNetwork":    nullResponseHandler,
-		"/NetworkDriver.CreateEndpoint":   createEndpointHandler,
-		"/NetworkDriver.EndpointOperInfo": endpointOperInfoHandler,
-		"/NetworkDriver.DeleteEndpoint":   nullResponseHandler,
-		"/NetworkDriver.Join":             joinHandler,
-		"/NetworkDriver.Leave":            nullResponseHandler,
-		"/NetworkDriver.DiscoverNew":      nullResponseHandler,
-		"/NetworkDriver.DiscoverDelete":   nullResponseHandler,
-	}
-
-	for route, handler := range routeHandlers {
-		http.HandleFunc(route, handler)
-	}
-	http.ListenAndServe(":8080", nil)
+	d := dummyNetworkDriver{}
+	h := network.NewHandler(d)
+	h.ServeTCP("test_network", ":8080", nil)
 }
 
-func activateHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/vnd.docker.plugins.v1.1+json")
-	w.Write([]byte(`{"Implements": ["NetworkDriver"]}`))
+func (dummyNetworkDriver) GetCapabilities() (*network.CapabilitiesResponse, error) {
+	var c network.CapabilitiesResponse
+	c.Scope = network.GlobalScope
+	return &c, nil
 }
 
-func getCapabilitiesHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/vnd.docker.plugins.v1.1+json")
-	w.Write([]byte(`{"Scope": "global"}`))
+func (dummyNetworkDriver) CreateNetwork(*network.CreateNetworkRequest) error {
+	return nil
 }
 
-func nullResponseHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/vnd.docker.plugins.v1.1+json")
-	w.Write([]byte(`{}`))
+func (dummyNetworkDriver) AllocateNetwork(*network.AllocateNetworkRequest) (*network.AllocateNetworkResponse, error) {
+	return nil, nil
 }
 
-func createEndpointHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/vnd.docker.plugins.v1.1+json")
-	w.Write([]byte(`
-		"Interface": {
-        "Address": "1.2.3.4",
-        "MacAddress": "AA:BB:CC:DD:EE:FF"
-    	}
-	`))
+func (dummyNetworkDriver) DeleteNetwork(*network.DeleteNetworkRequest) error {
+	return nil
 }
 
-func endpointOperInfoHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/vnd.docker.plugins.v1.1+json")
-	w.Write([]byte(`
-		{
-			"Value": {}
-		}
-	`))
+func (dummyNetworkDriver) FreeNetwork(*network.FreeNetworkRequest) error {
+	return nil
 }
 
-func joinHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/vnd.docker.plugins.v1.1+json")
-	w.Write([]byte(`
-		{
-			"InterfaceName": {
-				SrcName: "dummy0",
-				DstPrefix: "wut"
-			},
-			"StaticRoutes": [{
-				"Destination": "asdf",
-				"RouteType": 1,
-			}]
-		}
-	`))
+func (dummyNetworkDriver) CreateEndpoint(*network.CreateEndpointRequest) (*network.CreateEndpointResponse, error) {
+	return nil, nil
+}
+
+func (dummyNetworkDriver) DeleteEndpoint(*network.DeleteEndpointRequest) error {
+	return nil
+}
+
+func (dummyNetworkDriver) EndpointInfo(*network.InfoRequest) (*network.InfoResponse, error) {
+	return nil, nil
+}
+
+func (dummyNetworkDriver) Join(*network.JoinRequest) (*network.JoinResponse, error) {
+	return nil, nil
+}
+
+func (dummyNetworkDriver) Leave(*network.LeaveRequest) error {
+	return nil
+}
+
+func (dummyNetworkDriver) DiscoverNew(*network.DiscoveryNotification) error {
+	return nil
+}
+
+func (dummyNetworkDriver) DiscoverDelete(*network.DiscoveryNotification) error {
+	return nil
+}
+
+func (dummyNetworkDriver) ProgramExternalConnectivity(*network.ProgramExternalConnectivityRequest) error {
+	return nil
+}
+
+func (dummyNetworkDriver) RevokeExternalConnectivity(*network.RevokeExternalConnectivityRequest) error {
+	return nil
 }
