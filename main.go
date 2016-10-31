@@ -30,18 +30,22 @@ func main() {
 }
 
 func activateHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/vnd.docker.plugins.v1.1+json")
 	w.Write([]byte(`{"Implements": ["NetworkDriver"]}`))
 }
 
 func getCapabilitiesHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/vnd.docker.plugins.v1.1+json")
 	w.Write([]byte(`{"Scope": "global"}`))
 }
 
 func nullResponseHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/vnd.docker.plugins.v1.1+json")
 	w.Write([]byte(`{}`))
 }
 
 func createEndpointHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/vnd.docker.plugins.v1.1+json")
 	w.Write([]byte(`
 		"Interface": {
         "Address": "1.2.3.4",
@@ -51,6 +55,7 @@ func createEndpointHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func endpointOperInfoHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/vnd.docker.plugins.v1.1+json")
 	w.Write([]byte(`
 		{
 			"Value": {}
@@ -59,6 +64,7 @@ func endpointOperInfoHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func joinHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/vnd.docker.plugins.v1.1+json")
 	w.Write([]byte(`
 		{
 			"InterfaceName": {
