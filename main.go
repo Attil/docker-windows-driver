@@ -14,13 +14,13 @@ type dummyNetworkDriver struct{}
 func main() {
 	d := dummyNetworkDriver{}
 	h := network.NewHandler(d)
-	h.ServeTCP("test_network", ":8080", nil)
+	h.ServeTCP("test_network", "127.0.0.1:8080", nil)
 }
 
 func (dummyNetworkDriver) GetCapabilities() (*network.CapabilitiesResponse, error) {
 	fmt.Println("GetCapabilities")
 	r := &network.CapabilitiesResponse{}
-	r.Scope = network.GlobalScope
+	r.Scope = network.LocalScope
 	return r, nil
 }
 
