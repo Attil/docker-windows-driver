@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/docker/go-plugins-helpers/network"
+	"github.com/Microsoft/go-winio"
 )
 
 type dummyNetworkDriver struct{}
@@ -14,7 +15,23 @@ type dummyNetworkDriver struct{}
 func main() {
 	d := dummyNetworkDriver{}
 	h := network.NewHandler(d)
-	h.ServeTCP("test_network", "127.0.0.1:8080", nil)
+
+	config := PipeConfig {
+		SecurityDescriptor = "S:(ML;;NW;;;LW)D:(A;;0x12019f;;;WD)",	// for everyone?
+		MessageMode = true,
+		InputBufferSize = 4096,
+		OutputBufferSize = 4096
+	}
+	listener, err := ListenPipe("\\.\pipe\driverpipe", config)
+	if err != nil {
+		fmt.errorf(err)
+	}
+	
+	server := http.Server{
+		Addr:    addr,
+		Handler: h.mux,
+	}
+	return server.Serve(listener)
 }
 
 func (dummyNetworkDriver) GetCapabilities() (*network.CapabilitiesResponse, error) {
