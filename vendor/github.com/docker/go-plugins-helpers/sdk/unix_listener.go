@@ -17,22 +17,24 @@ const (
 	pluginSockDir = "/run/docker/plugins"
 )
 
-func newUnixListener(pluginName string, group string) (net.Listener, string, error) {
-	path, err := fullSocketAddress(pluginName)
-	if err != nil {
-		return nil, "", err
-	}
-	listener, err := setupSocketActivation()
-	if err != nil {
-		return nil, "", err
-	}
-	if listener == nil {
-		listener, err = sockets.NewUnixSocket(path, group)
+func newUnixListener(pluginName string, group string) func() (net.Listener, string, string, error) {
+	return func() (net.Listener, string, string, error) {
+		path, err := fullSocketAddress(pluginName)
 		if err != nil {
-			return nil, "", err
+			return nil, "", "", err
 		}
+		listener, err := setupSocketActivation()
+		if err != nil {
+			return nil, "", "", err
+		}
+		if listener == nil {
+			listener, err = sockets.NewUnixSocket(path, group)
+			if err != nil {
+				return nil, "", "", err
+			}
+		}
+		return listener, pluginName, path, nil
 	}
-	return listener, path, nil
 }
 
 func fullSocketAddress(address string) (string, error) {

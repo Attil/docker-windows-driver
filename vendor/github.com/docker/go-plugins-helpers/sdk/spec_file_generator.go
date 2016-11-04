@@ -10,11 +10,11 @@ import (
 type Proto string
 
 const (
-	ProtoTCP Proto = "tcp",
+	ProtoTCP Proto = "tcp"
 	ProtoNamedPipe Proto = "npipe"
 )
 
-func writeSpec(name, address string, proto Proto) {
+func writeSpec(name, address string, proto Proto) (string, error) {
 
 	var pluginSpecDir string
 	if runtime.GOOS == "windows" {
@@ -28,7 +28,7 @@ func writeSpec(name, address string, proto Proto) {
 	}
 	spec := filepath.Join(pluginSpecDir, name+".spec")
 
-	url := proto + "://" address
+	url := string(proto) + "://" + address
 	if err := ioutil.WriteFile(spec, []byte(url), 0644); err != nil {
 		return "", err
 	}

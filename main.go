@@ -20,7 +20,7 @@ func main() {
 		// This will set permissions for Everyone user allowing him to open, write, read the pipe
 		SecurityDescriptor: "S:(ML;;NW;;;LW)D:(A;;0x12019f;;;WD)",
 		InBufferSize:    4096,
-		OutBufferSize:   4096
+		OutBufferSize:   4096,
 	}
 
 	h.ServeWindows("//./pipe/testpipe", "testpipe", &config)

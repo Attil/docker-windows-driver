@@ -60,7 +60,12 @@ func (h Handler) HandleFunc(path string, fn func(w http.ResponseWriter, r *http.
 	h.mux.HandleFunc(path, fn)
 }
 
-func (h Handler) listenAndServe(listener, spec, err) {
+type newListenerFunc func() (net.Listener, string, string, error)
+
+func (h Handler) listenAndServe(fn newListenerFunc) error {
+
+	listener, addr, spec, err := fn()
+
 	server := http.Server{
 		Addr:    addr,
 		Handler: h.mux,
