@@ -49,6 +49,10 @@ func (h Handler) ServeUnix(systemGroup, addr string) error {
 	return h.listenAndServe("unix", addr, systemGroup, nil)
 }
 
+func (h Handler) ServeWindows(addr, pluginName string) error {
+	return h.listenAndServe("npipe", addr, pluginName, nil)
+}
+
 // HandleFunc registers a function to handle a request path with.
 func (h Handler) HandleFunc(path string, fn func(w http.ResponseWriter, r *http.Request)) {
 	h.mux.HandleFunc(path, fn)
@@ -71,6 +75,8 @@ func (h Handler) listenAndServe(proto, addr, group string, tlsConfig *tls.Config
 		l, spec, err = newTCPListener(addr, group, tlsConfig)
 	case "unix":
 		l, spec, err = newUnixListener(addr, group)
+	case "npipe":
+		l, spec, err = newWindowsListener(addr, group)
 	}
 
 	if spec != "" {
