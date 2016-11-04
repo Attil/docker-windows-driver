@@ -38,19 +38,21 @@ func (h Handler) Serve(l net.Listener) error {
 }
 
 // ServeTCP makes the handler to listen for request in a given TCP address.
-// It also writes the spec file on the right directory for docker to read.
+// It also writes the spec file in the right directory for docker to read.
 func (h Handler) ServeTCP(pluginName, addr string, tlsConfig *tls.Config) error {
-	return h.listenAndServe("tcp", addr, pluginName, tlsConfig)
+	return h.listenAndServe(newTCPListener(addr, pluginName, tlsConfig))
 }
 
 // ServeUnix makes the handler to listen for requests in a unix socket.
-// It also creates the socket file on the right directory for docker to read.
+// It also creates the socket file in the right directory for docker to read.
 func (h Handler) ServeUnix(systemGroup, addr string) error {
-	return h.listenAndServe("unix", addr, systemGroup, nil)
+	return h.listenAndServe(newUnixListener(addr, systemGroup))
 }
 
-func (h Handler) ServeWindows(addr, pluginName string) error {
-	return h.listenAndServe("npipe", addr, pluginName, nil)
+// ServeWindows makes the handler to listen for request in a windows named pipe.
+// It also creates the spec file in the right directory for docker to read.
+func (h Handler) ServeWindows(addr, pluginName string, pipeConfig *WindowsPipeConfig) error {
+	return h.listenAndServe(newWindowsListener(addr, pluginName, pipeConfig))
 }
 
 // HandleFunc registers a function to handle a request path with.
@@ -58,25 +60,10 @@ func (h Handler) HandleFunc(path string, fn func(w http.ResponseWriter, r *http.
 	h.mux.HandleFunc(path, fn)
 }
 
-func (h Handler) listenAndServe(proto, addr, group string, tlsConfig *tls.Config) error {
-	var (
-		err  error
-		spec string
-		l    net.Listener
-	)
-
+func (h Handler) listenAndServe(listener, spec, err) {
 	server := http.Server{
 		Addr:    addr,
 		Handler: h.mux,
-	}
-
-	switch proto {
-	case "tcp":
-		l, spec, err = newTCPListener(addr, group, tlsConfig)
-	case "unix":
-		l, spec, err = newUnixListener(addr, group)
-	case "npipe":
-		l, spec, err = newWindowsListener(addr, group)
 	}
 
 	if spec != "" {
@@ -86,5 +73,5 @@ func (h Handler) listenAndServe(proto, addr, group string, tlsConfig *tls.Config
 		return err
 	}
 
-	return server.Serve(l)
+	return server.Serve(listener)
 }
