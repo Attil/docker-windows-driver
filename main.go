@@ -5,10 +5,8 @@ package main
 
 import (
 	"fmt"
-	"net/http"
 
 	"github.com/docker/go-plugins-helpers/network"
-	"github.com/Microsoft/go-winio"
 )
 
 type dummyNetworkDriver struct{}
@@ -16,23 +14,7 @@ type dummyNetworkDriver struct{}
 func main() {
 	d := dummyNetworkDriver{}
 	h := network.NewHandler(d)
-
-	config := winio.PipeConfig {
-		SecurityDescriptor: "S:(ML;;NW;;;LW)D:(A;;0x12019f;;;WD)",	// for everyone?
-		MessageMode: true,
-		InputBufferSize: 4096,
-		OutputBufferSize: 4096}
-	listener, err := winio.ListenPipe("\\\\.\\pipe\\driverpipe", config)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	
-	server := http.Server{
-		Addr:    addr,
-		Handler: h.mux,
-	}
-	return server.Serve(listener)
+	h.ServeWindows("//./pipe/testpipe", "testpipe")
 }
 
 func (dummyNetworkDriver) GetCapabilities() (*network.CapabilitiesResponse, error) {
